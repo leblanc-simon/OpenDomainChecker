@@ -1,9 +1,11 @@
 .idea
 composer.lock
 config/config.php
+data
 data/apache
 data/fis
 data/openerp
 data/ovh
 data/php
 logs
+vendor
