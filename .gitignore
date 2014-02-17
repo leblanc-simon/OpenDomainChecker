@@ -1,0 +1,9 @@
+.idea
+composer.lock
+config/config.php
+data/apache
+data/fis
+data/openerp
+data/ovh
+data/php
+logs
