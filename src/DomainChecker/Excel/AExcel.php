@@ -40,6 +40,7 @@ abstract class AExcel
         }
         $this->getExcel()->setActiveSheetIndex($this->sheet);
         $this->getExcel()->getActiveSheet()->setTitle($type);
+        $this->getExcel()->getActiveSheet()->freezePane('B2');
 
         $this->sheet++;
 
