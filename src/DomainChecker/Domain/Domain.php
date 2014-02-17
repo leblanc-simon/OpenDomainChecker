@@ -169,27 +169,36 @@ class Domain
 
     public function isMailedByUs()
     {
-        if (null === $this->mx) {
+        if (is_array($this->mx) === false || count($this->mx) === 0) {
             return false;
         }
 
-        return in_array($this->mx, array_merge(
-            Config::get('webserver_ips'),
-            Config::get('mxserver_ips'),
-            Config::get('spamserver_ips')
-        ));
+        foreach ($this->mx as $mx) {
+            if (in_array($mx, array_merge(Config::get('webserver_ips'), Config::get('mxserver_ips'), Config::get('spamserver_ips'))) === true) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 
     public function hasBadMailedByUs()
     {
-        if (null === $this->mx) {
+        if (false === $this->isMailedByUs()) {
             return false;
         }
 
-        return  in_array($this->mx, Config::get('webserver_ips'))
+        foreach ($this->mx as $mx) {
+            if (in_array($mx, Config::get('webserver_ips'))
                 &&
-                in_array($this->mx, array_merge(Config::get('mxserver_ips'), Config::get('spamserver_ips'))) === false;
+                in_array($mx, array_merge(Config::get('mxserver_ips'), Config::get('spamserver_ips'))) === false
+            ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 
