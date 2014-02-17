@@ -23,6 +23,6 @@
         "symfony/process": "2.4.*@dev",
         "monolog/monolog": "1.7.0",
         "silex/silex": "1.2.*@dev",
-        "os/php-excel": "dev-master"
+        "phpoffice/phpexcel": "dev-master"
     }
 }
