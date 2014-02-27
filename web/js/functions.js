@@ -100,11 +100,12 @@ function viewDomains(datas)
     var tbody = '';
     $.each(datas, function(i, item){
         tbody += '<tr>' +
-            '<td>' + item.domain + '</td>' +
-            '<td>' + item.primary + '</td>' +
-            '<td>' + showNull(item.subname) + '</td>' +
-            '<td>' + showNull(item.dns_a) + '</td>' +
-            '<td>' + showNull(item.dns_mx) + '</td>'
+				'<td>' + item.domain + '</td>' +
+				'<td>' + item.primary + '</td>' +
+				'<td>' + showNull(item.subname) + '</td>' +
+				'<td>' + showBoolean(item.is_primary) + '</td>' +
+				'<td>' + showNull(item.dns_a) + '</td>' +
+				'<td>' + showNull(item.dns_mx) + '</td>' + 
             '</tr>';
     });
 
