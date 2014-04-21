@@ -85,6 +85,7 @@ function viewServers(datas)
                 '<td>' + showBoolean(item.php) + '</td>' +
                 '<td>' + showNull(item.fis) + '</td>' +
                 '<td>' + '' + '</td>' +
+                '<td><a class="edit" data-target="' + route_servers + '/' + item.ip + '">Modifier</a></td>' +
             '</tr>';
     });
 
@@ -105,13 +106,75 @@ function viewDomains(datas)
 				'<td>' + showNull(item.subname) + '</td>' +
 				'<td>' + showBoolean(item.is_primary) + '</td>' +
 				'<td>' + showNull(item.dns_a) + '</td>' +
-				'<td>' + showNull(item.dns_mx) + '</td>' + 
+				'<td>' + showNull(item.dns_mx) + '</td>' +
+                '<td><a class="edit" data-target="' + route_domains + '/' + item.domain + '">Modifier</a></td>' +
             '</tr>';
     });
 
     $('#domains table tbody').html(tbody);
 
     buildSearch('domains');
+}
+
+
+function buildForm(datas)
+{
+    var form = '';
+
+    if (!datas.domain) {
+        form += '<input type="hidden" name="_type" value="servers">';
+        form += '<input type="hidden" name="_id" value="' + datas.ip + '">';
+    } else {
+        form += '<input type="hidden" name="_type" value="domains">';
+        form += '<input type="hidden" name="_id" value="' + datas.domain + '">';
+    }
+
+
+    $.each(datas, function(key, value) {
+        console.log(key, value);
+        form += buildFormGroup(key, value, ($.inArray(key, additionnal_fields) == -1));
+    });
+
+    $.each(additionnal_fields, function(key, value) {
+        console.log('add : ' + value);
+        if (datas[value] == undefined) {
+            form += buildFormGroup(value, '', false);
+        }
+    });
+
+    $('#form .form').html(form);
+    toogleDiv('form', 'Modification de ' + (!datas.domain ? datas.ip : datas.domain));
+}
+
+
+function buildFormGroup(key, value, readonly)
+{
+    return '<div class="form-group">' +
+                '<label for="' + key +'" class="control-label col-md-2">' + key + '</label>' +
+                buildInput(key, value, readonly) +
+           '</div>';
+}
+
+
+function buildInput(key, value, readonly)
+{
+    var input = '<div class="col-md-10"><input id="' + key + '" name="' + key + '" ';
+    if (readonly) {
+        input += 'readonly="readonly" disabled="disabled" ';
+    }
+
+    if (typeof(value) == 'boolean') {
+        if (value) {
+            input += 'checked="checked" ';
+        }
+        input += 'value="1" type="checkbox">'
+    } else {
+        input += 'value="' + showNull(value) + '" type="text" class="form-control">';
+    }
+
+    input += '</div>';
+
+    return input;
 }
 
 
@@ -135,8 +198,11 @@ $(document).ready(function() {
 
             }
         });
+
+        return false;
     });
 
+    // Manage selector
     $('select').on('change', function(){
         var name = $(this).attr('name');
         var value = $(this).val();
@@ -155,5 +221,51 @@ $(document).ready(function() {
                 $(item).removeClass('hide-' + name);
             }
         });
+    });
+
+    // Manage edit
+    $(document).on('click', '.edit', function(){
+        var link = $(this).attr('data-target');
+
+        $.ajax({
+            url: link,
+            type: 'get',
+            dataType: 'json',
+            success: function(data) {
+                buildForm(data);
+            },
+            error: function() {
+
+            }
+        });
+
+        return false;
+    });
+
+    // Manage form
+    $(document).on('submit', 'form', function(){
+        $.ajax({
+            url: $(this).attr('action'),
+            type: $(this).attr('method'),
+            dataType: 'json',
+            data: $(this).serialize(),
+            success: function(data) {
+                var type = $('input[name="_type"]').val();
+                $('a[href="#' + type + '"]').eq(0).click();
+                $('#form .form').html('');
+            },
+            error: function() {
+
+            }
+        });
+
+        return false;
+    });
+
+    $(document).on('click', '#cancel', function(){
+        var type = $('input[name="_type"]').val();
+        $('a[href="#' + type + '"]').eq(0).click();
+        $('#form .form').html('');
+        return false;
     });
 });

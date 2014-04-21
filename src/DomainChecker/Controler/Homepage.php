@@ -17,6 +17,7 @@ class Homepage extends AControler
             'export-all',
             'export-servers',
             'export-domains',
+            'edit',
         );
 
         foreach ($routes as $route) {
@@ -26,6 +27,8 @@ class Homepage extends AControler
                 $layout
             );
         }
+
+        $layout = str_replace('%additionnal_fields%', json_encode(explode(',' ,Config::get('additionnal_fields'))), $layout);
 
         return $layout;
     }

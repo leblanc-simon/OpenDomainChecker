@@ -66,6 +66,7 @@
                                 <th>PHP</th>
                                 <th>F.I.S</th>
                                 <th>Backup</th>
+                                <th>Modifier</th>
                             </tr>
                             <tr>
                                 <th><select name="ip"></select></th>
@@ -76,6 +77,7 @@
                                 <th><select name="php"></select></th>
                                 <th><select name="fis"></select></th>
                                 <th><select name="backup"></select></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -98,6 +100,7 @@
                             <th>Domaine principal</th>
                             <th>A</th>
                             <th>MX</th>
+                            <th>Modifier</th>
                         </tr>
                         <tr>
                             <th><select name="domain"></select></th>
@@ -106,10 +109,21 @@
                             <th><select name="is_primary"></select></th>
                             <th><select name="a"></select></th>
                             <th><select name="mx"></select></th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
+                </div>
+            </div>
+
+            <div class="row hide main" id="form">
+                <div class="col-md-12">
+                    <form action="%route-edit%" role="form" class="form-horizontal" method="post">
+                        <div class="form"></div>
+                        <button type="submit" class="btn btn-success btn-lg">Valider</button>
+                        <a id="cancel" class="btn btn-danger btn-lg" role="button">Annuler</a>
+                    </form>
                 </div>
             </div>
         </div>
@@ -117,5 +131,10 @@
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script src="./js/functions.js"></script>
         <script src="./js/vendor/chosen.jquery.min.js"></script>
+        <script type="text/javascript">
+            var additionnal_fields = %additionnal_fields%;
+            var route_domains = '%route-domains%';
+            var route_servers = '%route-servers%';
+        </script>
     </body>
 </html>

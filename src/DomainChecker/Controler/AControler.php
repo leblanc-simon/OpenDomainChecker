@@ -29,7 +29,7 @@ abstract class AControler
 
     protected function renderError($message)
     {
-        $this->application->json(array('message' => $message), 500);
+        return $this->application->json(array('message' => $message), 500);
     }
 
 

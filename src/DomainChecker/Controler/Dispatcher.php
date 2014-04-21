@@ -3,6 +3,7 @@
 namespace DomainChecker\Controler;
 
 use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
 
 class Dispatcher
 {
@@ -25,6 +26,8 @@ class Dispatcher
         $this->setDomains();
 
         $this->setExport();
+
+        $this->setEdit();
     }
 
 
@@ -89,5 +92,16 @@ class Dispatcher
             $controler = new Export($self->application);
             return $controler->getDomains();
         })->bind('export-domains');
+    }
+
+
+    private function setEdit()
+    {
+        $self = $this;
+
+        $this->application->post('/edit', function(Request $request) use ($self) {
+            $controler = new Edit($self->application);
+            return $controler->save($request);
+        })->bind('edit');
     }
 }
