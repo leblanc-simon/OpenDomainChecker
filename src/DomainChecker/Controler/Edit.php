@@ -10,7 +10,7 @@ class Edit extends AControler
     public function save(Request $request)
     {
         $type = $request->get('_type');
-
+        
         if ('servers' === $type) {
             $return = $this->saveServer($request);
         } elseif ('domains' === $type) {
@@ -34,7 +34,7 @@ class Edit extends AControler
         return $this->saveInternal($request, 'addDomain');
     }
 
-
+    
     private function saveInternal(Request $request, $method)
     {
         $additionnal_fields = explode(',', Config::get('additionnal_fields'));

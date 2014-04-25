@@ -18,6 +18,7 @@ class Homepage extends AControler
             'export-servers',
             'export-domains',
             'edit',
+            'import',
         );
 
         foreach ($routes as $route) {
