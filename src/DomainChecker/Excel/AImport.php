@@ -15,7 +15,7 @@ abstract class AImport
     /**
      * @var filename
      */
-	protected $file;
+    protected $file;
 
 	 /**
      * @var Reader
@@ -32,16 +32,16 @@ abstract class AImport
      */
     protected $datas;
 
-	public function __construct($file)
+    public function __construct($file)
     {
         $this->file = $file;
         
     }
 
-	public function getFilename()
-	{
-		return self::$file;
-	}
+    public function getFilename()
+    {
+      return self::$file;
+    }
 
 	/**
 	* Load the sheet from data_dir and convert to an array 
@@ -50,7 +50,7 @@ abstract class AImport
     {
     	$this->reader = new \PHPExcel_Reader_Excel2007();
         $this->reader->setLoadSheetsOnly($sheetname);
-		$this->excel = $this->reader->load(Config::get('data_dir').'/'.self::$this->file);
+        $this->excel = $this->reader->load(Config::get('data_dir').'/'.self::$this->file);
     }
 
     /**
