@@ -37,8 +37,12 @@ class Edit extends AControler
     
     private function saveInternal(Request $request, $method)
     {
-        $additionnal_fields = explode(',', Config::get('additionnal_fields'));
-
+        if ($method == 'addDomain') {
+            $additionnal_fields = explode(',', Config::get('additionnal_fields_domain'));
+        } else {
+            $additionnal_fields = explode(',', Config::get('additionnal_fields_server'));
+        }
+        
         $values = array();
         foreach ($additionnal_fields as $field) {
             $values[$field] = $request->get($field);

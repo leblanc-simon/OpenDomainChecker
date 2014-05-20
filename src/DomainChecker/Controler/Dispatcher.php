@@ -28,6 +28,7 @@ class Dispatcher
         $this->setEdit();
 
         $this->setImport();
+        $this->setPutty();
     }
 
 
@@ -115,5 +116,16 @@ class Dispatcher
         })->bind('import');
 
     }
+
+    private function setPutty()
+    {
+        $self = $this;
+
+        $this->application->get('/putty', function() use ($self) {
+            $controler = new Putty($self->application);
+            return $controler->getFiles();
+        })->bind('putty');
+    }
+
 }
 

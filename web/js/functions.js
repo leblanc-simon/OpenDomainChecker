@@ -80,7 +80,7 @@ function viewServers(datas) {
                 '<td>' + showBoolean(item.php) + '</td>' +
                 '<td>' + showNull(item.fis) + '</td>' +
                 '<td>' + '' + '</td>' +
-                '<td><a class="edit" data-target="' + route_servers + '/' + item.ip + '">Modifier</a></td>' +
+                '<td><a style="cursor:pointer;" class="edit" data-target="' + route_servers + '/' + item.ip + '">Modifier</a></td>' +
             '</tr>';
     });
 
@@ -101,10 +101,9 @@ function viewDomains(datas) {
                 '<td>' + showBoolean(item.is_primary) + '</td>' +
                 '<td>' + showNull(item.dns_a) + '</td>' +
                 '<td>' + showNull(item.dns_mx) + '</td>' +
-                '<td><a class="edit" data-target="' + route_domains + '/' + item.domain + '">Modifier</a></td>' +
+                '<td><a style="cursor:pointer;" class="edit" data-target="' + route_domains + '/' + item.domain + '">Modifier</a></td>' +
             '</tr>';
     });
-
     $('#domains table tbody').html(tbody);
 
     buildSearch('domains');
@@ -121,19 +120,32 @@ function buildForm(datas) {
         form += '<input type="hidden" name="_type" value="domains">';
         form += '<input type="hidden" name="_id" value="' + datas.domain + '">';
     }
+    
+    /* Domain/Server */
+    if (datas.domain) {
+        $.each(datas, function (key, value) {
+            console.log(key, value);
+            form += buildFormGroup(key, value, ($.inArray(key, additionnal_fields_domain) == -1));
+        });
+        $.each(additionnal_fields_domain, function (key, value) {
+            console.log('add dom: ' + value);
+            if (datas[value] === undefined) {
+                form += buildFormGroup(value, '', false);
+            }
+        });
+    } else {
+        $.each(datas, function (key, value) {
+            console.log(key, value);
+            form += buildFormGroup(key, value, ($.inArray(key, additionnal_fields_server) == -1));
+        });
 
-
-    $.each(datas, function (key, value) {
-        console.log(key, value);
-        form += buildFormGroup(key, value, ($.inArray(key, additionnal_fields) == -1));
-    });
-
-    $.each(additionnal_fields, function (key, value) {
-        console.log('add : ' + value);
-        if (datas[value] === undefined) {
-            form += buildFormGroup(value, '', false);
-        }
-    });
+        $.each(additionnal_fields_server, function (key, value) {
+            console.log('add serv: ' + value);
+            if (datas[value] === undefined) {
+                form += buildFormGroup(value, '', false);
+            }
+        });
+    }
 
     $('#form .form').html(form);
     toogleDiv('form', 'Modification de ' + (!datas.domain ? datas.ip : datas.domain));
@@ -222,7 +234,7 @@ $(document).ready(function () {
             }
         });
     });
-
+    // click pointer
     // Manage edit
     $(document).on('click', '.edit', function () {
         var link = $(this).attr('data-target');

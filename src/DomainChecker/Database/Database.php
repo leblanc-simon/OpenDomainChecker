@@ -1,6 +1,7 @@
 <?php
 
 namespace DomainChecker\Database;
+use DomainChecker\Core\Config;
 
 class Database
 {
@@ -22,6 +23,11 @@ class Database
     public function getDomains()
     {
         return $this->database->getDomains();
+    }
+
+    public function generatePuttyFiles($zip_file)
+    {
+        return $this->database->generatePuttyFiles($zip_file);
     }
 
 

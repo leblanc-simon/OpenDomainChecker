@@ -56,6 +56,10 @@
 
             <div class="row hide main" id="servers">
                 <div class="col-md-12">
+                    <a class="btn btn-info btn-lg" href="%route-putty%" style="margin-bottom: 20px">
+                        <i class="glyphicon glyphicon-download-alt"></i>
+                        Exporter les fichiers PuTTY
+                    </a>
                     <a class="btn btn-info btn-lg pull-right" href="%route-export-servers%" style="margin-bottom: 20px">
                         <i class="glyphicon glyphicon-download-alt"></i>
                         Exporter les serveurs au format Excel
@@ -157,11 +161,10 @@
         <script src="./js/functions.js"></script>
         <script src="./js/vendor/chosen.jquery.min.js"></script>
         <script type="text/javascript">
-            var additionnal_fields = %additionnal_fields%;
+            var additionnal_fields_domain = %additionnal_fields_domain%;
+            var additionnal_fields_server = %additionnal_fields_server%;
             var route_domains = '%route-domains%';
             var route_servers = '%route-servers%';
         </script>
     </body>
 </html>
-
-https://github.com/leblanc-simon/OpenDomainChecker.git

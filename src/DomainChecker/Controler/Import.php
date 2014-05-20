@@ -67,6 +67,5 @@ class Import extends AControler
             header('Refresh: 3; URL= http://domaines.k.moulin.portailpro.net/');
             return $s ;
         }
-
     }
 }
