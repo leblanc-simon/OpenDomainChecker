@@ -1,21 +1,19 @@
-function toogleDiv(id, title)
-{
+function toogleDiv(id, title) {
     $('.main').addClass('hide');
     $('#' + id).removeClass('hide');
 
     $('h2').html(title);
 
     $('.nav li').removeClass('active');
-    $('.nav a[href="#' + id +'"]').parent().addClass('active');
+    $('.nav a[href="#' + id + '"]').parent().addClass('active');
 }
 
-function showBoolean(value)
-{
+
+function showBoolean(value) {
     return (value ? 'Oui' : 'Non');
 }
 
-function showNull(value)
-{
+function showNull(value) {
     if (value === null) {
         return '';
     }
@@ -36,7 +34,6 @@ function showNull(value)
 
         return return_value;
     }
-
     return value;
 }
 
@@ -49,8 +46,7 @@ function unique(list) {
 }
 
 
-function buildSearch(id)
-{
+function buildSearch(id) {
     $('#' + id + ' table thead tr:last th select').each(function(i, item) {
         var options = '<option value="#--#">Tous</option>';
         var values = new Array();
@@ -70,12 +66,11 @@ function buildSearch(id)
     });
 }
 
-function viewServers(datas)
-{
+function viewServers(datas) {
     toogleDiv('servers', 'Serveurs');
 
     var tbody = '';
-    $.each(datas, function(i, item){
+    $.each(datas, function (i, item) {
         tbody += '<tr>' +
                 '<td>' + item.ip + '</td>' +
                 '<td>' + showNull(item.hostname) + '</td>' +
@@ -85,7 +80,7 @@ function viewServers(datas)
                 '<td>' + showBoolean(item.php) + '</td>' +
                 '<td>' + showNull(item.fis) + '</td>' +
                 '<td>' + '' + '</td>' +
-                '<td><a class="edit" data-target="' + route_servers + '/' + item.ip + '">Modifier</a></td>' +
+                '<td><a style="cursor:pointer;" class="edit" data-target="' + route_servers + '/' + item.ip + '">Modifier</a></td>' +
             '</tr>';
     });
 
@@ -94,12 +89,11 @@ function viewServers(datas)
     buildSearch('servers');
 }
 
-function viewDomains(datas)
-{
+function viewDomains(datas) {
     toogleDiv('domains', 'Noms de domaine');
 
     var tbody = '';
-    $.each(datas, function(i, item){
+    $.each(datas, function (i, item) {
         tbody += '<tr>' +
                 '<td>' + item.domain + '</td>' +
                 '<td>' + item.primary + '</td>' +
@@ -107,18 +101,16 @@ function viewDomains(datas)
                 '<td>' + showBoolean(item.is_primary) + '</td>' +
                 '<td>' + showNull(item.dns_a) + '</td>' +
                 '<td>' + showNull(item.dns_mx) + '</td>' +
-                '<td><a class="edit" data-target="' + route_domains + '/' + item.domain + '">Modifier</a></td>' +
+                '<td><a style="cursor:pointer;" class="edit" data-target="' + route_domains + '/' + item.domain + '">Modifier</a></td>' +
             '</tr>';
     });
-
     $('#domains table tbody').html(tbody);
 
     buildSearch('domains');
 }
 
 
-function buildForm(datas)
-{
+function buildForm(datas) {
     var form = '';
 
     if (!datas.domain) {
@@ -128,42 +120,53 @@ function buildForm(datas)
         form += '<input type="hidden" name="_type" value="domains">';
         form += '<input type="hidden" name="_id" value="' + datas.domain + '">';
     }
+    
+    /* Domain/Server */
+    if (datas.domain) {
+        $.each(datas, function (key, value) {
+            console.log(key, value);
+            form += buildFormGroup(key, value, ($.inArray(key, additionnal_fields_domain) == -1));
+        });
+        $.each(additionnal_fields_domain, function (key, value) {
+            console.log('add dom: ' + value);
+            if (datas[value] === undefined) {
+                form += buildFormGroup(value, '', false);
+            }
+        });
+    } else {
+        $.each(datas, function (key, value) {
+            console.log(key, value);
+            form += buildFormGroup(key, value, ($.inArray(key, additionnal_fields_server) == -1));
+        });
 
-
-    $.each(datas, function(key, value) {
-        console.log(key, value);
-        form += buildFormGroup(key, value, ($.inArray(key, additionnal_fields) == -1));
-    });
-
-    $.each(additionnal_fields, function(key, value) {
-        console.log('add : ' + value);
-        if (datas[value] == undefined) {
-            form += buildFormGroup(value, '', false);
-        }
-    });
+        $.each(additionnal_fields_server, function (key, value) {
+            console.log('add serv: ' + value);
+            if (datas[value] === undefined) {
+                form += buildFormGroup(value, '', false);
+            }
+        });
+    }
 
     $('#form .form').html(form);
     toogleDiv('form', 'Modification de ' + (!datas.domain ? datas.ip : datas.domain));
 }
 
 
-function buildFormGroup(key, value, readonly)
-{
+function buildFormGroup(key, value, readonly) {
     return '<div class="form-group">' +
-                '<label for="' + key +'" class="control-label col-md-2">' + key + '</label>' +
+                '<label for="' + key + '" class="control-label col-md-2">' + key + '</label>' +
                 buildInput(key, value, readonly) +
            '</div>';
 }
 
 
-function buildInput(key, value, readonly)
-{
+function buildInput(key, value, readonly) {
     var input = '<div class="col-md-10"><input id="' + key + '" name="' + key + '" ';
     if (readonly) {
         input += 'readonly="readonly" disabled="disabled" ';
     }
 
-    if (typeof(value) == 'boolean') {
+    if (typeof value === 'boolean') {
         if (value) {
             input += 'checked="checked" ';
         }
@@ -177,64 +180,73 @@ function buildInput(key, value, readonly)
     return input;
 }
 
+function viewImport(datas) {
+    toogleDiv('import', 'Importer un Excel');
+}
 
-$(document).ready(function() {
+$(document).ready(function () {
     // Manage links
-    $('.link').on('click', function(){
+    $('.link').on('click', function () {
         var link = $(this).attr('data-target');
-        var callback = $(this).attr('data-callback') || null;
-        var method = $(this).attr('data-method') || 'GET';
+        callback = $(this).attr('data-callback') || null;
+        method = $(this).attr('data-method') || 'GET';
 
         $.ajax({
             url: link,
             type: method,
             dataType: 'json',
-            success: function(data) {
+            success: function (data) {
                 if (callback) {
                     window[callback](data);
                 }
             },
-            error: function(){
+            error: function () {
 
             }
         });
 
         return false;
     });
+    //cancel import page
+    $('a#canceled').on('click', function () {
+        $('#import').addClass('hide ');
+        $('#homepage').removeClass('hide');
+        })
+        ;
 
     // Manage selector
-    $('select').on('change', function(){
+    $('select').on('change', function () {
         var name = $(this).attr('name');
-        var value = $(this).val();
-        var position = $(this).parent().index();
-        var table = $(this).parent().parent().parent().parent();
+        value = $(this).val();
+        position = $(this).parent().index();
+        table = $(this).parent().parent().parent().parent();
 
         if (value === '#--#') {
             $(table).find('tbody tr.hide-' + name).removeClass('hide-' + name);
             return;
         }
 
-        $.each(table.find('tbody tr'), function(i, item) {
-            if ($(item).find('td:eq(' + position + ')').html() != value) {
+        $.each(table.find('tbody tr'), function (i, item) {
+            if ($(item).find('td:eq(' + position + ')').html() !== value) {
                 $(item).addClass('hide-' + name);
             } else {
                 $(item).removeClass('hide-' + name);
             }
         });
     });
-
+    // click pointer
     // Manage edit
-    $(document).on('click', '.edit', function(){
+    $(document).on('click', '.edit', function () {
         var link = $(this).attr('data-target');
 
         $.ajax({
             url: link,
             type: 'get',
             dataType: 'json',
-            success: function(data) {
+            success: function (data) {
                 buildForm(data);
             },
-            error: function() {
+            error: function () {
 
             }
         });
@@ -243,18 +255,18 @@ $(document).ready(function() {
     });
 
     // Manage form
-    $(document).on('submit', 'form', function(){
+    $(document).on('submit', '#form form', function () {
         $.ajax({
             url: $(this).attr('action'),
             type: $(this).attr('method'),
             dataType: 'json',
             data: $(this).serialize(),
-            success: function(data) {
+            success: function (data) {
                 var type = $('input[name="_type"]').val();
                 $('a[href="#' + type + '"]').eq(0).click();
                 $('#form .form').html('');
             },
-            error: function() {
+            error: function () {
 
             }
         });
@@ -262,7 +274,7 @@ $(document).ready(function() {
         return false;
     });
 
-    $(document).on('click', '#cancel', function(){
+    $(document).on('click', '#cancel', function () {
         var type = $('input[name="_type"]').val();
         $('a[href="#' + type + '"]').eq(0).click();
         $('#form .form').html('');

@@ -18,6 +18,8 @@ class Homepage extends AControler
             'export-servers',
             'export-domains',
             'edit',
+            'import',
+            'putty',
         );
 
         foreach ($routes as $route) {
@@ -28,8 +30,9 @@ class Homepage extends AControler
             );
         }
 
-        $layout = str_replace('%additionnal_fields%', json_encode(explode(',' ,Config::get('additionnal_fields'))), $layout);
-
+        $layout = str_replace('%additionnal_fields_domain%', json_encode(explode(',' ,Config::get('additionnal_fields_domain'))), $layout);
+        $layout = str_replace('%additionnal_fields_server%', json_encode(explode(',' ,Config::get('additionnal_fields_server'))), $layout);
+        
         return $layout;
     }
 }

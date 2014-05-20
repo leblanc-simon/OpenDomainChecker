@@ -5,6 +5,7 @@
         <title>OpenDomainChecker</title>
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="./js/vendor/chosen.min.css">
+
         <style>
             tr[class*="hide-"] {display: none}
         </style>
@@ -27,6 +28,7 @@
                         <li><a href="#servers" data-target="%route-servers%" class="link" data-callback="viewServers">Serveurs</a></li>
                         <li><a href="#domains" data-target="%route-domains%" class="link" data-callback="viewDomains">Noms de domaine</a></li>
                         <li><a href="%route-export-all%">Tout exporter</a></li>
+                        <li><a href="#import" class="link" onclick="viewImport()">Importer</a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>
@@ -43,6 +45,9 @@
                     <button class="btn btn-primary btn-lg btn-block link" data-target="%route-domains%" data-callback="viewDomains">
                         Voir les domaines
                     </button>
+                    <a class="btn btn-default btn-lg btn-block" href="#import" onclick="viewImport()">
+                        Importer au format Excel
+                    </a>
                     <a class="btn btn-default btn-lg btn-block" href="%route-export-all%">
                         Tout exporter au format Excel
                     </a>
@@ -51,6 +56,10 @@
 
             <div class="row hide main" id="servers">
                 <div class="col-md-12">
+                    <a class="btn btn-info btn-lg" href="%route-putty%" style="margin-bottom: 20px">
+                        <i class="glyphicon glyphicon-download-alt"></i>
+                        Exporter les fichiers PuTTY
+                    </a>
                     <a class="btn btn-info btn-lg pull-right" href="%route-export-servers%" style="margin-bottom: 20px">
                         <i class="glyphicon glyphicon-download-alt"></i>
                         Exporter les serveurs au format Excel
@@ -128,11 +137,32 @@
             </div>
         </div>
 
+        <div class="row hide main"  id="import">
+                <div class="col-md-4 import">
+                    <form action="%route-import%" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <h3><span class="label label-default">Envoyer</span></h3>
+                            <input type="file" id ="inputfile" name="upload"/>
+                        </div>
+
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <span class="glyphicon glyphicon-open"></span> Envoyer
+                            </button>
+
+                        <a id="canceled" class="btn btn-danger btn-lg" role="button">
+                            <span class="glyphicon glyphicon-remove"></span> Annuler
+                        </a>
+
+                     </form>
+                </div>
+        </div>
+
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script src="./js/functions.js"></script>
         <script src="./js/vendor/chosen.jquery.min.js"></script>
         <script type="text/javascript">
-            var additionnal_fields = %additionnal_fields%;
+            var additionnal_fields_domain = %additionnal_fields_domain%;
+            var additionnal_fields_server = %additionnal_fields_server%;
             var route_domains = '%route-domains%';
             var route_servers = '%route-servers%';
         </script>

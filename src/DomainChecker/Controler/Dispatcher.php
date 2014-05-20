@@ -24,10 +24,11 @@ class Dispatcher
 
         $this->setServers();
         $this->setDomains();
-
         $this->setExport();
-
         $this->setEdit();
+
+        $this->setImport();
+        $this->setPutty();
     }
 
 
@@ -104,4 +105,27 @@ class Dispatcher
             return $controler->save($request);
         })->bind('edit');
     }
+
+    private function setImport()
+    {
+        $self = $this;
+
+        $this->application->post('/import', function(Request $request) use ($self) {
+            $controler = new Import($self->application);
+            return $controler->receiveFile($request);
+        })->bind('import');
+
+    }
+
+    private function setPutty()
+    {
+        $self = $this;
+
+        $this->application->get('/putty', function() use ($self) {
+            $controler = new Putty($self->application);
+            return $controler->getFiles();
+        })->bind('putty');
+    }
+
 }
+
