@@ -50,22 +50,20 @@ class Import extends AControler
     public function receiveFile(Request $request)
     {
         $file = $request->files->get('upload');
-
+        $serv = 'http://'.$request->getHttpHost();
+        $message = 'Aucun fichier ou mauvaise extension';
         if (($file === null) || $file->getClientOriginalExtension()!=='xlsx') {
-            $s = 'Aucun fichier ou mauvaise extension';
-
-            header('Refresh: 3; URL= http://domaines.k.moulin.portailpro.net/');
-            return $s ;
+            header('Refresh: 2; URL='.$serv);
+            return $message ;
         }
         else
         {
             /* Move to data directory */
             $file -> move(Config::get('data_dir'),'temp.xlsx');
             $this->saveAll();
-            $s = 'Importation reussie !';
-
-            header('Refresh: 3; URL= http://domaines.k.moulin.portailpro.net/');
-            return $s ;
+            $message = 'Importation reussie !';
+            header('Refresh: 2; URL='.$serv);
+            return $message ;
         }
     }
 }
