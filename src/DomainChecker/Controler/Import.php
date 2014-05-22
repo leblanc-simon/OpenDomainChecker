@@ -7,6 +7,7 @@ use DomainChecker\Excel\DsImport;
 use DomainChecker\Excel\ServerImport;
 use DomainChecker\Excel\DomainImport;
 use Symfony\Component\HttpFoundation\Request;
+use Silex\Provider\SessionServiceProvider;
 
 
 class Import extends AControler 
@@ -20,7 +21,7 @@ class Import extends AControler
     public function saveServer()
     {
         $excel = new ServerImport('temp.xlsx');
-    	$excel->saveServer($this->database);
+        $excel->saveServer($this->database);
 
         return $this->renderJson($this->database->getServers());
     }
@@ -50,22 +51,24 @@ class Import extends AControler
     public function receiveFile(Request $request)
     {
         $file = $request->files->get('upload');
+        $app = $this->application;
+        $message = 'Aucun fichier ou mauvaise extension';
 
+        $app->register(new SessionServiceProvider());
+
+        /* Ajout message de session */
         if (($file === null) || $file->getClientOriginalExtension()!=='xlsx') {
-            $s = 'Aucun fichier ou mauvaise extension';
-
-            header('Refresh: 3; URL= http://domaines.k.moulin.portailpro.net/');
-            return $s ;
+            $app['session']->set('message', $message);
+            return $this->application->redirect('/#import');
         }
         else
         {
             /* Move to data directory */
+            $message = 'Importation Reussie';
             $file -> move(Config::get('data_dir'),'temp.xlsx');
             $this->saveAll();
-            $s = 'Importation reussie !';
-
-            header('Refresh: 3; URL= http://domaines.k.moulin.portailpro.net/');
-            return $s ;
+            $app['session']->set('message', $message);
+            return $this->application->redirect('/');
         }
     }
 }

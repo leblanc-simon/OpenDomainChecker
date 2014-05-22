@@ -37,9 +37,16 @@ class Dispatcher
         $self = $this;
 
         $this->application->get('/', function() use ($self) {
+
+        $controler = new Homepage($self->application);
+        return $controler->get();
+        })->bind('homepage');
+
+        $this->application->get('/#import', function() use ($self) {
+
             $controler = new Homepage($self->application);
             return $controler->get();
-        })->bind('homepage');
+        })->bind('homepage-import');
     }
 
 
