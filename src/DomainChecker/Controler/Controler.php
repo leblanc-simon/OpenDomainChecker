@@ -23,6 +23,7 @@ class Controler
         $this->application = new Application();
 
         $this->application->register(new UrlGeneratorServiceProvider());
+        $this->application['debug']=1;
     }
 
 

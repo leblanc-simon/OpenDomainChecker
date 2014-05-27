@@ -8,7 +8,6 @@ function toogleDiv(id, title) {
     $('.nav a[href="#' + id + '"]').parent().addClass('active');
 }
 
-
 function showBoolean(value) {
     return (value ? 'Oui' : 'Non');
 }
@@ -180,7 +179,7 @@ function buildInput(key, value, readonly) {
     return input;
 }
 
-function viewImport(datas) {
+function viewImport() {
     toogleDiv('import', 'Importer un Excel');
 }
 
@@ -207,12 +206,25 @@ $(document).ready(function () {
 
         return false;
     });
+
     //cancel import page
     $('a#canceled').on('click', function () {
-        $('#import').addClass('hide ');
-        $('#homepage').removeClass('hide');
-        })
-        ;
+        $('#import-message').addClass('hide ');
+        toogleDiv('homepage', 'Accueil');
+    });
+
+    /* Import message */
+    $(document).ready(function () {
+        var hash = window.location.hash;
+        if (hash === '#import') {
+            toogleDiv('import', 'Importer un Excel');
+        }
+        var message = $('#import-message');
+        if (message.text() !== '') {
+            message.removeClass("hide");
+            message.delay(1200).slideToggle(600);
+        }
+    });
 
     // Manage selector
     $('select').on('change', function () {
@@ -234,7 +246,7 @@ $(document).ready(function () {
             }
         });
     });
-    // click pointer
+
     // Manage edit
     $(document).on('click', '.edit', function () {
         var link = $(this).attr('data-target');
@@ -247,7 +259,6 @@ $(document).ready(function () {
                 buildForm(data);
             },
             error: function () {
-
             }
         });
 
@@ -267,7 +278,6 @@ $(document).ready(function () {
                 $('#form .form').html('');
             },
             error: function () {
-
             }
         });
 

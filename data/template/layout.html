@@ -32,11 +32,12 @@
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>
+
         </div>
 
         <div class="container-fluid" style="margin-top: 50px;">
-            <h2>Accueil</h2>
 
+            <h2>Accueil</h2>
             <div class="row main" id="homepage">
                 <div class="col-md-12">
                     <button class="btn btn-primary btn-lg btn-block link" data-target="%route-servers%" data-callback="viewServers">
@@ -135,26 +136,27 @@
                     </form>
                 </div>
             </div>
-        </div>
 
-        <div class="row hide main"  id="import">
-                <div class="col-md-4 import">
+            <div class="row hide main"  id="import">
+                <div class="col-md-12 import">
                     <form action="%route-import%" method="post" enctype="multipart/form-data">
+
                         <div class="form-group">
                             <h3><span class="label label-default">Envoyer</span></h3>
                             <input type="file" id ="inputfile" name="upload"/>
                         </div>
 
-                            <button type="submit" class="btn btn-success btn-lg">
-                                <span class="glyphicon glyphicon-open"></span> Envoyer
-                            </button>
+                        <button type="submit" class="btn btn-success btn-lg importing">
+                            <span class="glyphicon glyphicon-open"></span> Envoyer
+                        </button>
 
                         <a id="canceled" class="btn btn-danger btn-lg" role="button">
                             <span class="glyphicon glyphicon-remove"></span> Annuler
                         </a>
-
-                     </form>
+                    </form>
                 </div>
+            </div>
+            <div id="import-message" class="hide alert alert-info" style="margin-top: 10px"><h4>%message-import%</h4></div>
         </div>
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
